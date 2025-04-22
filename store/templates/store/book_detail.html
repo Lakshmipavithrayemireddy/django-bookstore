@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+  <h2>{{ book.title }}</h2>
+  {% if book.cover_image_url %}
+      <img src="{{ book.cover_image_url }}" alt="{{ book.title }} cover" style="max-width: 200px; float: left; margin: 0 20px 10px 0;">
+  {% endif %}
+  <p><strong>Author:</strong> {{ book.author }}</p>
+  <p><strong>Price:</strong> ${{ book.price }}</p>
+  <p><strong>Available Stock:</strong> {{ book.stock }}</p>
+  <p><strong>Description:</strong> {{ book.description|linebreaksbr }}</p> {# Use linebreaksbr filter for formatting #}
+
+  {% if book.stock > 0 %}
+      <p><a href="{% url 'store:add_to_cart' book.id %}">Add to Cart</a></p>
+  {% else %}
+      <p><em>Out of stock</em></p>
+  {% endif %}
+  <div style="clear: both;"></div> <!-- Clear float -->
+  <p><a href="{% url 'store:book_list' %}">« Back to book list</a></p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Books{% endblock %}
+
+{% block content %}
+  <h2>Available Books</h2>
+  {% if books %}
+    {% for book in books %}
+      <div class="book">
+        {% if book.cover_image_url %}
+            <img src="{{ book.cover_image_url }}" alt="{{ book.title }} cover">
+        {% endif %}
+        <h3><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+        <p>By {{ book.author }}</p>
+        <p>Price: ${{ book.price }}</p>
+        <p><a href="{% url 'store:add_to_cart' book.id %}">Add to Cart</a></p>
+        <div style="clear: both;"></div> <!-- Clear float -->
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No books are currently available.</p>
+  {% endif %}
+{% endblock %}

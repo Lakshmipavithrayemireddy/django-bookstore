@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}My Bookstore{% endblock %}</title>
+    <!-- Simple CSS (or link Bootstrap) -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        nav { background-color: #f0f0f0; padding: 10px; margin-bottom: 20px; border-radius: 5px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #333; }
+        nav a:hover { color: #007bff; }
+        .book { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .book img { max-width: 100px; float: left; margin-right: 15px; }
+        .messages { list-style: none; padding: 0; margin-bottom: 15px; }
+        .messages li { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .messages li.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .messages li.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .messages li.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .cart-table th, .cart-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .cart-table { border-collapse: collapse; width: 100%; margin-bottom: 15px;}
+        .cart-total { text-align: right; font-weight: bold; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'store:book_list' %}">Home</a> |
+        <a href="{% url 'store:view_cart' %}">View Cart</a> |
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.username }}!</span> |
+            <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0; padding: 0;">
+                {% csrf_token %}
+                <button type="submit" style="background:none; border:none; padding:0; margin:0; color: #333; text-decoration: none; cursor: pointer; font-size: inherit; vertical-align: baseline;">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'store:register' %}">Register</a>
+        {% endif %}
+    </nav>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        <!-- Page specific content will go here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>© {% now "Y" %} My Awesome Bookstore</p>
+    </footer>
+</body>
+</html>
